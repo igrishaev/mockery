@@ -63,19 +63,38 @@
 
 ;; (defmacro with-mocks
 ;;   [mock-opt & body]
-;;   `(let [~mock (make-mock ~opt)
-;;          target-var# (make-var (:target ~opt))
-;;          target-fn# (make-mock-fn ~mock)]
-;;      (with-redefs-fn {target-var# target-fn#}
-;;        (fn []
-;;          ~@body))))
+;;   (if (empty? mock-opt)
+;;     42
+;;     (let [[mock opt] (first mock-opt)
+;;           mock-opt-rest (rest mock-opt)]
+;;       `(with-mock ~mock ~opt
+;;          (with-mocks ~mock-opt-rest ~@body))
+;;       )))
 
-(defn test-fn [foo bar & args]
-  [foo bar])
+;; (defmacro with-mocks
+;;   [mock-opt & body]
+;;   (let [mock-binds (take-nth 2 mock-opt)
+;;         mock-opts (take-nth 2 (rest mock-opt))
+;;         ;; mocks (map make-mock mock-opts)
+;;         ;; target-funcs (map make-mock-fn mocks)
+;;         ;; target-vars (map (comp make-var :target) mock-opts)
+;;         binds (vec (interleave mock-binds mocks))
+;;         ]
+;;     `(let (vec (interleave ~mock-binds [1]))
+;;        42
 
-(defn test-mock []
-  (with-mock mock
-    {:target :test-fn
-     :return 42}
-    (test-fn 1 2 3)
-    @mock))
+
+;;      ;;binds#
+;;      ;; (let (vec binds#)
+;;      ;;   (with-redefs-fn
+;;      ;;     (zipmap target-vars# target-funcs#)
+;;      ;;     (fn []
+;;      ;;       ~@body)))
+;;      )
+;;     )
+;; )
+
+;; (defmacro with-mock
+;;   [mock opt & body]
+;;   `(with-mocks [~mock ~opt]
+;;      ~@body))
