@@ -4,8 +4,8 @@
 (def +mock-defaults+
   {:called? false
    :call-count 0
-   :call-args ()
-   :call-args-list ()})
+   :call-args nil
+   :call-args-list []})
 
 (defn keyword-to-symbol
   [kwd]
@@ -68,9 +68,8 @@
 (defmacro with-mock
   [mock opt & body]
   (let [target (-> opt :target coerce-target)]
-    `(do
-       (check-resolve! ~target)
-       (let [~mock (make-mock ~opt)
-             target-fn# (make-mock-fn ~mock)]
-         (with-redefs [~target target-fn#]
-           ~@body)))))
+    (check-resolve! target)
+    `(let [~mock (make-mock ~opt)
+           target-fn# (make-mock-fn ~mock)]
+       (with-redefs [~target target-fn#]
+         ~@body))))
