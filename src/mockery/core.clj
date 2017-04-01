@@ -7,23 +7,9 @@
    :call-args ()
    :call-args-list ()})
 
-(defn resolve-keyword
+(defn keyword-to-symbol
   [kwd]
-  (resolve (apply symbol ((juxt namespace name) kwd))))
-
-(defn make-var [target]
-  (cond
-    (var? target)
-    target
-
-    (symbol? target)
-    (resolve target)
-
-    (keyword? target)
-    (resolve-keyword target)
-
-    :else
-    (throw (Exception. "wrong target"))))
+  (apply symbol ((juxt namespace name) kwd)))
 
 (defn make-mock [opt]
   (-> +mock-defaults+
@@ -52,49 +38,39 @@
     ;; return value
     (:return @mock)))
 
+(defn make-symbol [target]
+  (cond
+    (symbol? target)
+    (resolve target)
+
+    (keyword? target)
+    (keyword-to-symbol target)
+
+    :else
+    (throw (Exception. (str target)))))
+
+(defn check-resolve! [target]
+  (when-not (resolve target)
+    (when-let [ns' (namespace target)]
+      (require (symbol ns')))))
+
+(defn coerce-target [target]
+  (cond
+    (symbol? target)
+    target
+
+    (keyword? target)
+    (keyword-to-symbol target)
+
+    :else
+    (throw (Exception. (format "Wrong target: %s" target)))))
+
 (defmacro with-mock
   [mock opt & body]
-  `(let [~mock (make-mock ~opt)
-         target-var# (make-var (:target ~opt))
-         target-fn# (make-mock-fn ~mock)]
-     (with-redefs-fn {target-var# target-fn#}
-       (fn []
-         ~@body))))
-
-;; (defmacro with-mocks
-;;   [mock-opt & body]
-;;   (if (empty? mock-opt)
-;;     42
-;;     (let [[mock opt] (first mock-opt)
-;;           mock-opt-rest (rest mock-opt)]
-;;       `(with-mock ~mock ~opt
-;;          (with-mocks ~mock-opt-rest ~@body))
-;;       )))
-
-;; (defmacro with-mocks
-;;   [mock-opt & body]
-;;   (let [mock-binds (take-nth 2 mock-opt)
-;;         mock-opts (take-nth 2 (rest mock-opt))
-;;         ;; mocks (map make-mock mock-opts)
-;;         ;; target-funcs (map make-mock-fn mocks)
-;;         ;; target-vars (map (comp make-var :target) mock-opts)
-;;         binds (vec (interleave mock-binds mocks))
-;;         ]
-;;     `(let (vec (interleave ~mock-binds [1]))
-;;        42
-
-
-;;      ;;binds#
-;;      ;; (let (vec binds#)
-;;      ;;   (with-redefs-fn
-;;      ;;     (zipmap target-vars# target-funcs#)
-;;      ;;     (fn []
-;;      ;;       ~@body)))
-;;      )
-;;     )
-;; )
-
-;; (defmacro with-mock
-;;   [mock opt & body]
-;;   `(with-mocks [~mock ~opt]
-;;      ~@body))
+  (let [target (-> opt :target coerce-target)]
+    `(do
+       (check-resolve! ~target)
+       (let [~mock (make-mock ~opt)
+             target-fn# (make-mock-fn ~mock)]
+         (with-redefs [~target target-fn#]
+           ~@body)))))
