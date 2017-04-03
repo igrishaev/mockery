@@ -1,5 +1,6 @@
 (ns mockery.core-test
   (:require [clojure.test :refer :all]
+            [slingshot.slingshot :refer [try+]]
             [mockery.core :refer [with-mock]]))
 
 (defn test-fn [a b]
@@ -44,29 +45,31 @@
   (with-mock mock
     {:target :test-fn
      :throw (Exception. "boom")}
-    (test-fn 1)
-    (is (= @mock 1))))
+    (is (thrown? Exception
+                 (test-fn 1))) ))
 
 (deftest test-slingshot
   (with-mock mock
     {:target :test-fn
      :throw {:type :boom}}
-    (test-fn 1)
-    (is (= @mock 1))))
+    (try+
+     (test-fn 1)
+     (is false "should not be executed")
+     (catch [:type :boom] _
+       (is true)))))
 
-(deftest test-sideeffect
-  (with-mock mock
-    {:target :test-fn
-     :return 42
-     :side-effect #(print 42)
-}
-    (test-fn 1)
-    (is (= @mock 1))))
+(deftest test-side-effect
+  (let [trap (atom false)
+        effect #(reset! trap true)]
+    (with-mock mock
+      {:target :test-fn
+       :side-effect effect}
+      (test-fn 1)
+      (is @trap))))
 
 (deftest test-require-ns
   (with-mock mock
     {:target mockery.foreign-ns/foreign-fn
-     :return 42
-     }
+     :return 42}
     (mockery.foreign-ns/foreign-fn)
-    (is (= @mock 1))))
+    (is (-> @mock :called?))))
