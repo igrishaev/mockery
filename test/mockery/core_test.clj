@@ -11,8 +11,12 @@
      :return 42}
     (let [result (test-fn 1 2)]
       (is (= result 42))
-      (is (= @mock 1))
-)))
+      (is (= (-> @mock (dissoc :target))
+             {:called? true
+              :call-count 1
+              :call-args '(1 2)
+              :call-args-list '[(1 2)]
+              :return 42})))))
 
 (deftest test-multiple
   (with-mock mock
@@ -21,14 +25,20 @@
     (test-fn 1)
     (test-fn 1 2)
     (test-fn 1 2 3)
-    (is (= @mock 1))))
+    (is (= (-> @mock (dissoc :target))
+           {:called? true
+            :call-count 3
+            :call-args '(1 2 3)
+            :call-args-list '[(1) (1 2) (1 2 3)]
+            :return 42}))))
 
 (deftest test-keyword
   (with-mock mock
     {:target :test-fn
      :return 42}
     (test-fn 1)
-    (is (= @mock 1))))
+    (is (= (-> @mock :target)
+           :test-fn))))
 
 (deftest test-throw
   (with-mock mock
