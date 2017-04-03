@@ -41,6 +41,14 @@
     (is (= (-> @mock :target)
            :test-fn))))
 
+(deftest test-symbol
+  (with-mock mock
+    {:target 'test-fn
+     :return 42}
+    (test-fn 1)
+    (is (= (-> @mock :target)
+           'test-fn))))
+
 (deftest test-throw
   (with-mock mock
     {:target :test-fn

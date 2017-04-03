@@ -38,21 +38,13 @@
     ;; return value
     (:return @mock)))
 
-(defn make-symbol [target]
-  (cond
-    (symbol? target)
-    (resolve target)
-
-    (keyword? target)
-    (keyword-to-symbol target)
-
-    :else
-    (throw (Exception. (str target)))))
-
 (defn check-resolve! [target]
   (when-not (resolve target)
     (when-let [ns' (namespace target)]
       (require (symbol ns')))))
+
+(defn cons? [val]
+  (instance? clojure.lang.Cons val))
 
 (defn coerce-target [target]
   (cond
@@ -62,8 +54,12 @@
     (keyword? target)
     (keyword-to-symbol target)
 
+    (and (cons? target)
+         (-> target first (= 'quote)))
+    (second target)
+
     :else
-    (throw (Exception. (format "Wrong target: %s" target)))))
+    (throw (Exception. (format "Wrong target: %s" (type target))))))
 
 (defmacro with-mock
   [mock opt & body]
