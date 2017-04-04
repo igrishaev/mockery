@@ -63,7 +63,25 @@
     (second target)
 
     :else
-    (throw (Exception. (format "Wrong target: %s" (type target))))))
+    (throw (Exception. (format "Wrong target: %s" target)))))
+
+(defmacro with-mocks
+  [bind-opt & body]
+  (let [binds (take-nth 2 bind-opt)
+        opts (take-nth 2 (rest bind-opt))
+        targets (mapv #(-> % :target coerce-target) opts)
+        make-mock* (fn [bind opt]
+                     `(make-mock ~opt))
+        mocks (mapv make-mock* binds opts)
+        target-fns (for [bind binds]
+                     `(make-mock-fn ~bind))
+        lets* (vec (interleave binds mocks))
+        redefs* (vec (interleave targets target-fns))]
+    (doseq [target targets]
+      (check-resolve! target))
+    `(let ~lets*
+       (with-redefs ~redefs*
+         ~@body))))
 
 (defmacro with-mock
   [mock opt & body]

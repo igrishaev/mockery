@@ -1,10 +1,19 @@
 (ns mockery.core-test
   (:require [clojure.test :refer :all]
             [slingshot.slingshot :refer [try+]]
-            [mockery.core :refer [with-mock]]))
+            [mockery.core :refer [with-mock with-mocks]]))
 
 (defn test-fn [a b]
   (+ a b))
+
+(defn test-fn-2 [x y]
+  (* x y))
+
+(deftest test-no-calls
+  (with-mock mock
+    {:target test-fn}
+    (is (= (-> @mock :called?)
+           false))))
 
 (deftest test-target-var
   (with-mock mock
@@ -19,7 +28,7 @@
               :call-args-list '[(1 2)]
               :return 42})))))
 
-(deftest test-multiple
+(deftest test-multiple-calls
   (with-mock mock
     {:target test-fn
      :return 42}
@@ -87,3 +96,22 @@
     {:target :test-fn
      :return #(+ 1 2 3)}
     (is (= (test-fn) 6))))
+
+(deftest test-mock-multiple
+  (with-mocks
+    [foo {:target :test-fn}
+     bar {:target :test-fn-2}]
+    (test-fn 1)
+    (test-fn-2 1 2)
+    (is (= @foo
+           {:called? true
+            :call-count 1
+            :call-args '(1)
+            :call-args-list '[(1)]
+            :target :test-fn}))
+    (is (= @bar
+           {:called? true
+            :call-count 1
+            :call-args '(1 2)
+            :call-args-list '[(1 2)]
+            :target :test-fn-2}))))
