@@ -15,6 +15,16 @@
     (is (= (-> @mock :called?)
            false))))
 
+(deftest test-old-value
+  (let [old1 (test-fn 1 2)]
+    (with-mock mock
+      {:target test-fn
+       :return 42}
+      (let [new1 (test-fn 1 2)]
+        (is (= new1 42))))
+    (let [old2 (test-fn 1 2)]
+      (is (= old1 old2 3)))))
+
 (deftest test-target-var
   (with-mock mock
     {:target test-fn
