@@ -6,7 +6,7 @@
 (defn test-fn [a b]
   (+ a b))
 
-(deftest test-simple
+(deftest test-target-var
   (with-mock mock
     {:target test-fn
      :return 42}
@@ -33,7 +33,7 @@
             :call-args-list '[(1) (1 2) (1 2 3)]
             :return 42}))))
 
-(deftest test-keyword
+(deftest test-target-keyword
   (with-mock mock
     {:target :test-fn
      :return 42}
@@ -41,7 +41,7 @@
     (is (= (-> @mock :target)
            :test-fn))))
 
-(deftest test-symbol
+(deftest test-target-symbol
   (with-mock mock
     {:target 'test-fn
      :return 42}
@@ -81,3 +81,9 @@
      :return 42}
     (mockery.foreign-ns/foreign-fn)
     (is (-> @mock :called?))))
+
+(deftest test-return-fn
+  (with-mock mock
+    {:target :test-fn
+     :return #(+ 1 2 3)}
+    (is (= (test-fn) 6))))

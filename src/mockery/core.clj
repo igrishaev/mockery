@@ -19,6 +19,7 @@
 (defn make-mock-fn
   [mock]
   (fn [& args]
+
     ;; update mock fields
     (swap! mock assoc :called? true)
     (swap! mock update-in [:call-count] inc)
@@ -36,7 +37,10 @@
         (throw+ exc)))
 
     ;; return value
-    (:return @mock)))
+    (let [return (:return @mock)]
+      (if (fn? return)
+        (return)
+        return))))
 
 (defn check-resolve! [target]
   (when-not (resolve target)
