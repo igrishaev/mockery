@@ -1,36 +1,17 @@
-# mockery
+# Mockery
 
-FIXME: description
+[url-mock-2]:http://www.voidspace.org.uk/python/mock/
 
-## Installation
+[url-foord]:http://www.voidspace.org.uk/python/weblog/index.shtml
 
-Download from http://example.com/FIXME.
+Simple and lightweight library to mock Clojure functions. If was inspired by
+Python's [mock tool][url-mock-2] initially written by
+[Michael Foord][url-foord].
 
-## Usage
+## Why?
 
-FIXME: explanation
+## Example
 
-    $ java -jar mockery-0.1.0-standalone.jar [args]
+## Features
 
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
-
-## License
-
-Copyright © 2017 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+## Other
