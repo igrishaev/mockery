@@ -54,6 +54,9 @@ namespace.
   </div><div class="toc-section" style="margin-left: 1em;">
     <a style="margin-top: 3px;" href="#var-section">Vars and Functions</a>
     <div class="toc-entry" style="margin-left: 1em;">
+      <a href="#mockery.core/with-mock" class="toc-entry-anchor">with-mock</a>
+      
+    </div><div class="toc-entry" style="margin-left: 1em;">
       <a href="#mockery.core/with-mocks" class="toc-entry-anchor">with-mocks</a>
       
     </div>
@@ -84,6 +87,85 @@ namespace.
   <div id="var-entry">
     <br />
     <hr />
+    <h2 id="mockery.core/with-mock">with-mock</h2>
+    <span id="var-type">macro</span><br />
+    <pre id="var-usage">Usage: (with-mock mock opt &amp; body)
+</pre>
+    <pre id="var-docstr">Runs the code block substituting a target function with a dummy
+one ("mock" function). This dummy function behaves the way you
+determine with options. It counts the number of calls, accumulates
+it's arguments, can cause side effects or rise a given
+exception. Once you go out from the macro, the target function will
+obtain it's origin value.
+
+Arguments:
+
+- `mock`: a symbol to bind a mock instance inside the code block,
+
+- `opt`: a map with the following parameters:
+
+-- `:target` (required): a symbol or a keyword points to a target
+function to mock. May include a namespace (be full-qualified).
+
+-- `:value`: any value to return from a mocked function. If it's a
+function by itself (defn, fn or #(...)), it will be called
+afterwards.
+
+-- `:side-effect`: any function with no arguments that is triggered
+when calling a target function.
+
+-- `:throw`: either an Exception instance to be thrown with standard
+`throw` pipeline or any data structure (usually a map) to throw it
+with Slingshot's `throw+` macro. Useful to simulate runtime
+exceptions.
+
+More on mock instance.
+
+The mock you bind with a `mock` parameter is an atom holds a map. It
+extends the `opt` map described above. In addition to those
+immutable fields, it has the following ones:
+
+-- `:called?`: a boolean flag indicates whether a function was called
+at least one time or not. `false` by default.
+
+-- `:call-count`: a number times the function was called. 0 by default.
+
+-- `:call-args`: the last arguments were passed to the
+function. `nil` by default.
+
+-- `:call-args-list`: a vector of all the args were passed, `[]` by
+default.
+
+Example:
+
+(with-mock mock
+  {:target :clojure.pprint/pprint
+   :return ":-)"
+   :side-effect #(println "Hi!")}
+  (clojure.pprint/pprint {:foo 42}))
+
+Hi!
+:-)
+
+Once you deref the `mock` variable inside the code block, you'll get:
+
+{:called? true
+ :call-count 1
+ :call-args ({:foo 42})
+ :call-args-list [({:foo 42})]
+ :target :clojure.pprint/pprint
+ :return ":-)"
+ :side-effect #function[mockery.core/eval12666/fn--12667]}
+
+Checking `:call-count` and `:call-args` might be good for your unit
+tests.</pre>
+    <pre id="var-specs"></pre>
+    
+    
+    <a id="var-source" href="https://github.com/igrishaev/mockery/blob/d27ae4124e2a02c633cc2fa442b33fb01b7092b7/src/mockery/core.clj#L104">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
     <h2 id="mockery.core/with-mocks">with-mocks</h2>
     <span id="var-type">macro</span><br />
     <pre id="var-usage">Usage: (with-mocks bind-opt &amp; body)
@@ -95,7 +177,7 @@ parameter.</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/igrishaev/mockery/blob/3cebe09c7f90dbf5bb6c70b013fd36ef54c9846c/src/mockery/core.clj#L82">Source</a>
+    <a id="var-source" href="https://github.com/igrishaev/mockery/blob/d27ae4124e2a02c633cc2fa442b33fb01b7092b7/src/mockery/core.clj#L82">Source</a>
   </div>
 </div>
 
