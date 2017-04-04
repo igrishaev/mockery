@@ -106,8 +106,8 @@
   one (\"mock\" function). This dummy function behaves the way you
   determine with options. It counts the number of calls, accumulates
   it's arguments, can cause side effects or rise a given
-  exception. Once you go out from macro, the target function will
-  obtain it's initial value.
+  exception. Once you go out from the macro, the target function will
+  obtain it's origin value.
 
   Arguments:
 
@@ -133,8 +133,8 @@
   More on mock instance.
 
   The mock you bind with a `mock` parameter is an atom holds a map. It
-  extends the `opt` map described above. In addition to those immutable
-  fields, it has the following extra ones:
+  extends the `opt` map described above. In addition to those
+  immutable fields, it has the following ones:
 
   -- `:called?`: a boolean flag indicates whether a function was called
   at least one time or not. `false` by default.
@@ -151,8 +151,8 @@
 
   (with-mock mock
     {:target :clojure.pprint/pprint
-     :return ":-)"
-     :side-effect #(println "Hi!")}
+     :return \":-)\"
+     :side-effect #(println \"Hi!\")}
     (clojure.pprint/pprint {:foo 42}))
 
   Hi!
