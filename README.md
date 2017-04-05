@@ -53,6 +53,15 @@ compose a final result.
 Mockery helps to imitate such unusual behaviour and write unit tests that cover
 all the cases were mentioned.
 
+## Installation
+
+Add this to your dependencies:
+
+`[mockery "0.1.0"]`
+
+Note that since Mockery is used mostly for unit tests, it's better to put it
+into the `test` project's profile, not the global one.
+
 ## Example
 
 Mockery provides `with-mock` macros. It substitutes a function with a temporary
