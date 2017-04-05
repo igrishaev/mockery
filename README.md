@@ -74,42 +74,42 @@ Quick example:
 
 ## Features
 
-1. Mockery works with unit test framework as well:
+Mockery works with unit test framework as well:
 
-  ```clojure
-  (defn mock-google [f]
-    (with-mock _
-      {:target get-geo-point
-       :return {:lat 14.2345235
-                :lng 52.523513}} ;; what your function should return instead
-      (f)))
-
-  (use-fixtures
-    :each
-    mock-google)
-
-  (deftest ...)
-  ```
-
-  During the test, every `(get-geo-point ...)` call will return just the data
-  you specified without network communication.
-
-  `:return` value could be a function that will be called to produce further
-  result.
-
-2. You don't need to import a namespace in which you target function is
-   stored. Specify a target with just a keyword and Mockery will discover it by
-   itself. In case the namespace hasn't been imported yet, Mockery will import
-   it automatically:
-
-   ```clojure
+```clojure
+(defn mock-google [f]
   (with-mock _
-    {:target :myapp.google/get-geo-point
-     :return {:lat 14.2345235 :lng 52.523513}}
-    (myapp.google/get-geo-point)) ;; it's available now
-  ```
+    {:target get-geo-point
+     :return {:lat 14.2345235
+              :lng 52.523513}} ;; what your function should return instead
+    (f)))
 
-3. Simulate both standard and [Slingshot][url-sling] exceptions:
+(use-fixtures
+  :each
+  mock-google)
+
+(deftest ...)
+```
+
+During the test, every `(get-geo-point ...)` call will return just the data you
+specified without network communication.
+
+`:return` value could be a function that will be called to produce further
+result.
+
+You don't need to import a namespace in which you target function is
+stored. Specify a target with just a keyword and Mockery will discover it by
+itself. In case the namespace hasn't been imported yet, Mockery will import it
+automatically:
+
+```clojure
+(with-mock _
+  {:target :myapp.google/get-geo-point
+   :return {:lat 14.2345235 :lng 52.523513}}
+  (myapp.google/get-geo-point)) ;; it's available now
+```
+
+Simulate both standard and [Slingshot][url-sling] exceptions:
 
 ```clojure
 
@@ -129,63 +129,62 @@ Quick example:
    (test-fn 1)
    (catch [:type :domain/error] data
      (println data)))) ;; process data map here
-
 ```
 
-3. Add side effects (prints, logs) passing a function without arguments:
+Add side effects (prints, logs) passing a function without arguments:
 
-   ```clojure
-   (with-mock mock
-      {:target :my-func
-       :return 42
-       :side-effect #(println "Hello!")}
-      (my-func 1))
-   ;; in addition to the result, "Hello!" will appear.
-   ```
+```clojure
+(with-mock mock
+   {:target :my-func
+    :return 42
+    :side-effect #(println "Hello!")}
+   (my-func 1))
+;; in addition to the result, "Hello!" will appear.
+```
 
-4. Ensure your function was called the exact number of times with proper
-   arguments. The `mock` atom holds a state that changes when you call the
-   mocked function. It accumulates its arguments and the number of calls:
+Ensure your function was called the exact number of times with proper
+arguments. The `mock` atom holds a state that changes when you call the mocked
+function. It accumulates its arguments and the number of calls:
 
-   ```clojure
-   (with-mock mock
-     {:target test-fn
-      :return 42}
-     (test-fn 1)
-     (test-fn 1 2)
-     (test-fn 1 2 3)
-     @mock)
+```clojure
+(with-mock mock
+  {:target test-fn
+   :return 42}
+  (test-fn 1)
+  (test-fn 1 2)
+  (test-fn 1 2 3)
+  @mock)
 
-   ;; returns
+;; returns
 
-   {:called? true
-    :call-count 3
-    :call-args '(1 2 3) ;; the last args
-    :call-args-list '[(1) (1 2) (1 2 3)] ;; args history
-    :return 42} ;; some fields are skipped
-    ```
+{:called? true
+ :call-count 3
+ :call-args '(1 2 3) ;; the last args
+ :call-args-list '[(1) (1 2) (1 2 3)] ;; args history
+ :return 42} ;; some fields are skipped
+ ```
 
-5. You may mock multiple functions at once using `with-mocks` macro:
+You may mock multiple functions at once using `with-mocks` macro:
 
-   ```clojure
-   (with-mocks
-    [foo {:target :test-fn}
-     bar {:target :test-fn-2}]
-    (test-fn 1)
-    (test-fn-2 1 2)
-    (is (= @foo
-           {:called? true
-            :call-count 1
-            :call-args '(1)
-            :call-args-list '[(1)]
-            :target :test-fn}))
-    (is (= @bar
-           {:called? true
-            :call-count 1
-            :call-args '(1 2)
-            :call-args-list '[(1 2)]
-            :target :test-fn-2})))
-   ```
+```clojure
+(with-mocks
+ [foo {:target :test-fn}
+  bar {:target :test-fn-2}]
+ (test-fn 1)
+ (test-fn-2 1 2)
+ (is (= @foo
+        {:called? true
+         :call-count 1
+         :call-args '(1)
+         :call-args-list '[(1)]
+         :target :test-fn}))
+ (is (= @bar
+        {:called? true
+         :call-count 1
+         :call-args '(1 2)
+         :call-args-list '[(1 2)]
+         :target :test-fn-2})))
+```
 
 ## Other
 
