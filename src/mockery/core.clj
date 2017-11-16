@@ -1,6 +1,5 @@
 (ns mockery.core
-  "A library to mock Clojure functions."
-  (:require [slingshot.slingshot :refer [throw+]]))
+  "A library to mock Clojure functions.")
 
 (def ^:private
   +mock-defaults+
@@ -22,7 +21,19 @@
       (merge opt)
       atom))
 
-(defn- make-mock-fn
+(defn- smart-throw
+  [exc]
+  (cond
+    (instance? Exception exc)
+    (throw exc)
+
+    (map? exc)
+    (throw (ex-info "Mockery exception" exc))
+
+    :default
+    (assert false (format "Unsupported exception data: %s" exc))))
+
+(defn make-mock-fn
   "Returns a function to substitute a target.
   Calling this function will change the mock's state."
   [mock]
@@ -40,9 +51,7 @@
 
     ;; trigger exception
     (when-let [exc (:throw @mock)]
-      (if (instance? Exception exc)
-        (throw exc)
-        (throw+ exc)))
+      (smart-throw exc))
 
     ;; return value
     (let [return (:return @mock)]
@@ -125,16 +134,15 @@
   -- `:side-effect`: any function with no arguments that is triggered
   when calling a target function.
 
-  -- `:throw`: either an Exception instance to be thrown with standard
-  `throw` pipeline or any data structure (usually a map) to throw it
-  with Slingshot's `throw+` macro. Useful to simulate runtime
-  exceptions.
+  -- `:throw`: either an Exception instance to be thrown with the
+  standard `throw` pipeline or any map to be thrown with `(ex-info)`
+  wrapper. Useful to simulate runtime exceptions.
 
   More on mock instance.
 
-  The mock you bind with a `mock` parameter is an atom holds a map. It
-  extends the `opt` map described above. In addition to those
-  immutable fields, it has the following ones:
+  The mock instance you have bound to the `mock` parameter is an atom
+  holds a map. It extends the `opt` map described above. In addition
+  to those immutable fields, it has the following ones:
 
   -- `:called?`: a boolean flag indicates whether a function was called
   at least one time or not. `false` by default.
