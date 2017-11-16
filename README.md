@@ -57,7 +57,7 @@ all the cases were mentioned.
 
 Add this to your dependencies:
 
-`[mockery "0.1.0"]`
+`[mockery "0.1.1"]`
 
 Note that since Mockery is used mostly for unit tests, it's better to put it
 into the `test` project's profile, not the global one.

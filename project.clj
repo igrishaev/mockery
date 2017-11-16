@@ -1,4 +1,4 @@
-(defproject mockery "0.1.0"
+(defproject mockery "0.1.1"
   :description "Mocking Clojure library."
   :url "https://github.com/igrishaev/mockery"
   :license {:name "Eclipse Public License"
