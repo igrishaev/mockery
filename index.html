@@ -54,6 +54,12 @@ namespace.
   </div><div class="toc-section" style="margin-left: 1em;">
     <a style="margin-top: 3px;" href="#var-section">Vars and Functions</a>
     <div class="toc-entry" style="margin-left: 1em;">
+      <a href="#mockery.core/make-mock" class="toc-entry-anchor">make-mock</a>
+      
+    </div><div class="toc-entry" style="margin-left: 1em;">
+      <a href="#mockery.core/make-mock-fn" class="toc-entry-anchor">make-mock-fn</a>
+      
+    </div><div class="toc-entry" style="margin-left: 1em;">
       <a href="#mockery.core/with-mock" class="toc-entry-anchor">with-mock</a>
       
     </div><div class="toc-entry" style="margin-left: 1em;">
@@ -87,6 +93,31 @@ namespace.
   <div id="var-entry">
     <br />
     <hr />
+    <h2 id="mockery.core/make-mock">make-mock</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (make-mock opt)
+</pre>
+    <pre id="var-docstr">Retuns an atom the represents a mock.</pre>
+    <pre id="var-specs"></pre>
+    
+    
+    <a id="var-source" href="https://github.com/igrishaev/mockery/blob/53aef8b6a47c0585bc1362cd1ab623078f52b27c/src/mockery/core.clj#L17">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="mockery.core/make-mock-fn">make-mock-fn</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (make-mock-fn mock)
+</pre>
+    <pre id="var-docstr">Returns a function to substitute a target.
+Calling this function will change the mock's state.</pre>
+    <pre id="var-specs"></pre>
+    
+    
+    <a id="var-source" href="https://github.com/igrishaev/mockery/blob/53aef8b6a47c0585bc1362cd1ab623078f52b27c/src/mockery/core.clj#L36">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
     <h2 id="mockery.core/with-mock">with-mock</h2>
     <span id="var-type">macro</span><br />
     <pre id="var-usage">Usage: (with-mock mock opt &amp; body)
@@ -114,16 +145,15 @@ afterwards.
 -- `:side-effect`: any function with no arguments that is triggered
 when calling a target function.
 
--- `:throw`: either an Exception instance to be thrown with standard
-`throw` pipeline or any data structure (usually a map) to throw it
-with Slingshot's `throw+` macro. Useful to simulate runtime
-exceptions.
+-- `:throw`: either an Exception instance to be thrown with the
+standard `throw` pipeline or any map to be thrown with `(ex-info)`
+wrapper. Useful to simulate runtime exceptions.
 
 More on mock instance.
 
-The mock you bind with a `mock` parameter is an atom holds a map. It
-extends the `opt` map described above. In addition to those
-immutable fields, it has the following ones:
+The mock instance you have bound to the `mock` parameter is an atom
+holds a map. It extends the `opt` map described above. In addition
+to those immutable fields, it has the following ones:
 
 -- `:called?`: a boolean flag indicates whether a function was called
 at least one time or not. `false` by default.
@@ -162,7 +192,7 @@ tests.</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/igrishaev/mockery/blob/d27ae4124e2a02c633cc2fa442b33fb01b7092b7/src/mockery/core.clj#L104">Source</a>
+    <a id="var-source" href="https://github.com/igrishaev/mockery/blob/53aef8b6a47c0585bc1362cd1ab623078f52b27c/src/mockery/core.clj#L113">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -177,7 +207,7 @@ parameter.</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/igrishaev/mockery/blob/d27ae4124e2a02c633cc2fa442b33fb01b7092b7/src/mockery/core.clj#L82">Source</a>
+    <a id="var-source" href="https://github.com/igrishaev/mockery/blob/53aef8b6a47c0585bc1362cd1ab623078f52b27c/src/mockery/core.clj#L91">Source</a>
   </div>
 </div>
 
