@@ -12,6 +12,15 @@ Simple and lightweight library to mock Clojure functions. If was inspired by
 Python's [mock tool][url-mock-2] initially written by
 [Michael Foord][url-foord].
 
+## Installation
+
+Add this to your dependencies:
+
+`[mockery "0.1.1-SNAPSHOT"]`
+
+Please note, Mockery is used mostly for unit tests so it's better to put it into
+the `:test` project's profile, not the global one.
+
 ## Why?
 
 Imagine you have a function that fetches data from any remote service, say
@@ -52,15 +61,6 @@ compose a final result.
 
 Mockery helps to imitate such unusual behaviour and write unit tests that cover
 all the cases were mentioned.
-
-## Installation
-
-Add this to your dependencies:
-
-`[mockery "0.1.1"]`
-
-Note that since Mockery is used mostly for unit tests, it's better to put it
-into the `test` project's profile, not the global one.
 
 ## Example
 
