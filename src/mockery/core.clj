@@ -15,7 +15,7 @@
   [kwd]
   (apply symbol ((juxt namespace name) kwd)))
 
-(defn- make-mock
+(defn make-mock
   "Retuns an atom the represents a mock."
   [opt]
   (-> +mock-defaults+
