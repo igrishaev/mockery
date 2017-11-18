@@ -15,6 +15,13 @@
     (is (= (-> @mock :called?)
            false))))
 
+(deftest test-opt-as-var
+  (let [opt {:target ::test-fn}]
+    (with-mock mock opt
+      (test-fn 1 2)
+      (is (= (-> @mock :called?)
+             true)))))
+
 (deftest test-old-value
   (let [old1 (test-fn 1 2)]
     (with-mock mock
@@ -52,21 +59,13 @@
             :call-args-list '[(1) (1 2) (1 2 3)]
             :return 42}))))
 
-(deftest test-target-keyword
+(deftest test-target-symbol
   (with-mock mock
-    {:target ::test-fn
+    {:target 'mockery.core-test/test-fn
      :return 42}
     (test-fn 1)
-    (is (= (-> @mock :target)
-           :test-fn))))
-
-(deftest test-target-symbol ;; todo
-  (with-mock mock
-    {:target ::test-fn
-     :return 42}
-    (test-fn 1)
-    (is (= (-> @mock ::target)
-           'test-fn))))
+    (is (= (-> @mock :call-count)
+           1))))
 
 (deftest test-throw
   (with-mock mock
@@ -93,13 +92,6 @@
        :side-effect effect}
       (test-fn 1)
       (is @trap))))
-
-#_(deftest test-require-ns
-  (with-mock mock
-    {:target mockery.foreign-ns/foreign-fn
-     :return 42}
-    (mockery.foreign-ns/foreign-fn)
-    (is (-> @mock :called?))))
 
 (deftest test-return-fn
   (with-mock mock
