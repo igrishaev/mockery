@@ -59,34 +59,30 @@
         (return)
         return))))
 
-(defn- check-resolve!
-  "Checks whether it's possible to resolve a target symbol.
-  In case it's not, silently requires a namespace (if supplied into a
-  symbol)."
-  [target]
-  (when-not (resolve target)
-    (when-let [ns' (namespace target)]
-      (require (symbol ns')))))
+(defn- qualified?
+  [symbol]
+  (not (nil? (namespace symbol))))
 
-(defn- cons? [val]
-  (instance? clojure.lang.Cons val))
+(defn resolve-failure [target]
+  (assert false (format "Cannot resolve target: %s" target)))
 
-(defn- coerce-target
-  "Tries to convert various data to a symbol."
+(defn resolve!
+  "todo"
   [target]
   (cond
+
     (symbol? target)
-    target
+    (if (qualified? target)
+      (if-let [ref (resolve target)]
+        ref
+        (resolve-failure target))
+      (resolve-failure target))
 
     (keyword? target)
-    (keyword-to-symbol target)
+    (recur (keyword-to-symbol target))
 
-    (and (cons? target)
-         (-> target first (= 'quote)))
-    (second target)
-
-    :else
-    (throw (Exception. (format "Wrong target: %s" target)))))
+    :default
+    (resolve-failure target)))
 
 (defmacro with-mocks
   "Like `with-mock` but for multiple mocks at once. `bind-opt` is a
@@ -94,20 +90,17 @@
   option map. See `with-mock` for detailed description of each
   parameter."
   [bind-opt & body]
-  (let [binds (take-nth 2 bind-opt)
-        opts (take-nth 2 (rest bind-opt))
-        targets (mapv #(-> % :target coerce-target) opts)
-        make-mock* (fn [bind opt]
-                     `(make-mock ~opt))
-        mocks (mapv make-mock* binds opts)
-        target-fns (for [bind binds]
-                     `(make-mock-fn ~bind))
-        lets* (vec (interleave binds mocks))
-        redefs* (vec (interleave targets target-fns))]
-    (doseq [target targets]
-      (check-resolve! target))
-    `(let ~lets*
-       (with-redefs ~redefs*
+  `(let [~@(for [[i# el#] (map-indexed vector bind-opt)]
+             (if (even? i#)
+               el#
+               `(make-mock ~el#)))]
+     (with-redefs-fn
+       (hash-map
+        ~@(for [[i# el#] (map-indexed vector (reverse bind-opt))]
+            (if (even? i#)
+              `(resolve! (:target ~el#))
+              `(make-mock-fn ~el#))))
+       (fn []
          ~@body))))
 
 (defmacro with-mock
