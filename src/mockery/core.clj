@@ -67,7 +67,8 @@
   (assert false (format "Cannot resolve target: %s" target)))
 
 (defn resolve!
-  "todo"
+  "Resolves a variable by either a symbol or keyword.
+  Rises an assertion error if not found."
   [target]
   (cond
 
