@@ -16,7 +16,7 @@ by [Michael Foord][url-foord].
 
 Add it to your dependencies:
 
-`[mockery "0.1.1-SNAPSHOT"]`
+`[mockery "0.1.2"]`
 
 Mockery is used mostly for unit tests so it's better to put it into the `:test`
 project's profile but not the global one.
