@@ -155,6 +155,10 @@
   -- `:call-args-list`: a vector of all the args were passed, `[]` by
   default.
 
+  -- `:return`: the latest returned value.
+
+  -- `:return-list`: a vector of all the values have ever been returned.
+
   Example:
 
   (with-mock mock
