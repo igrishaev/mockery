@@ -7,7 +7,8 @@
   {:called? false
    :call-count 0
    :call-args nil
-   :call-args-list []})
+   :call-args-list []
+   :return-list []})
 
 (defn- keyword-to-symbol
   "Turns a keyword into a symbold."
@@ -33,6 +34,12 @@
     :default
     (assert false (format "Unsupported exception data: %s" exc))))
 
+(defn eval-mock [mock]
+  (let [return (:return @mock)]
+    (if (fn? return)
+      (return)
+      return)))
+
 (defn make-mock-fn
   "Returns a function to substitute a target.
   Calling this function will change the mock's state."
@@ -41,9 +48,9 @@
 
     ;; update mock fields
     (swap! mock assoc :called? true)
-    (swap! mock update-in [:call-count] inc)
+    (swap! mock update :call-count inc)
     (swap! mock assoc :call-args args)
-    (swap! mock update-in [:call-args-list] conj args)
+    (swap! mock update :call-args-list conj args)
 
     ;; trigger side effect
     (when-let [side-effect (:side-effect @mock)]
@@ -53,11 +60,10 @@
     (when-let [exc (:throw @mock)]
       (smart-throw exc))
 
-    ;; return value
-    (let [return (:return @mock)]
-      (if (fn? return)
-        (return)
-        return))))
+    ;; eval the value, save it and return
+    (let [result (eval-mock mock)]
+      (swap! mock update :return-list conj result)
+      result)))
 
 (defn- qualified?
   [symbol]

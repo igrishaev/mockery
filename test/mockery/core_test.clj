@@ -43,6 +43,7 @@
               :call-count 1
               :call-args '(1 2)
               :call-args-list '[(1 2)]
+              :return-list [42]
               :return 42})))))
 
 (deftest test-multiple-calls
@@ -57,7 +58,8 @@
             :call-count 3
             :call-args '(1 2 3)
             :call-args-list '[(1) (1 2) (1 2 3)]
-            :return 42}))))
+            :return 42
+            :return-list [42 42 42]}))))
 
 (deftest test-target-symbol
   (with-mock mock
@@ -110,10 +112,33 @@
             :call-count 1
             :call-args '(1)
             :call-args-list '[(1)]
-            :target ::test-fn}))
+            :target ::test-fn
+            :return-list [nil]}))
     (is (= @bar
            {:called? true
             :call-count 1
             :call-args '(1 2)
             :call-args-list '[(1 2)]
-            :target ::test-fn-2}))))
+            :target ::test-fn-2
+            :return-list [nil]}))))
+
+(deftest test-various-results
+  (let [state (atom 0)
+        func (fn []
+               (swap! state inc)
+               @state)]
+    (with-mocks
+      [foo {:target ::test-fn
+            :return func}]
+
+      (test-fn :a)
+      (test-fn :b)
+      (test-fn :c)
+
+      (is (= (dissoc @foo :return)
+             {:called? true
+              :call-count 3
+              :call-args '(:c)
+              :call-args-list '[(:a) (:b) (:c)]
+              :return-list [1 2 3]
+              :target ::test-fn})))))
