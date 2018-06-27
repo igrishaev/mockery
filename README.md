@@ -166,7 +166,10 @@ mocked function. It accumulates its arguments and the number of calls:
  :call-count 3
  :call-args '(1 2 3)                  ;; the last args
  :call-args-list '[(1) (1 2) (1 2 3)] ;; args history
- :return 42}
+
+ :return 42                           ;; the last result
+ :return-list [42 42 42]              ;; the entire result history
+}
  ```
 
 You may mock multiple functions at once using `with-mocks` macro:
@@ -196,4 +199,4 @@ You may mock multiple functions at once using `with-mocks` macro:
 For further reading, check out [Mockery documentation][url-docs]
 and [unit tests][url-tests]. Feel free to submit your issues/suggestions.
 
-Mockery was written by [Ivan Grishaev][url-ivan], 2017.
+Mockery was written by [Ivan Grishaev][url-ivan], 2018.

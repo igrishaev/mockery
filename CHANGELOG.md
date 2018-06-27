@@ -1,3 +1,6 @@
+## 0.1.3
+ * `:return-list` field added
+
 ## 0.1.2
  * the main macros is rewritten completely
 
