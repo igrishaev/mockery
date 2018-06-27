@@ -3,15 +3,15 @@
    :name "mockery.core",
    :wiki-url "https://igrishaev.github.io/mockeryindex.html",
    :source-url
-   "https://github.com/igrishaev/mockery/blob/0986061885217c658d68f35462bceb9c352bb81b/src/mockery/core.clj"}),
+   "https://github.com/igrishaev/mockery/blob/304c3d0da758d53d4e716f98ed91a9eabf001f69/src/mockery/core.clj"}),
  :vars
  ({:raw-source-url
-   "https://github.com/igrishaev/mockery/raw/0986061885217c658d68f35462bceb9c352bb81b/src/mockery/core.clj",
+   "https://github.com/igrishaev/mockery/raw/304c3d0da758d53d4e716f98ed91a9eabf001f69/src/mockery/core.clj",
    :name "make-mock",
    :file "src/mockery/core.clj",
    :source-url
-   "https://github.com/igrishaev/mockery/blob/0986061885217c658d68f35462bceb9c352bb81b/src/mockery/core.clj#L17",
-   :line 17,
+   "https://github.com/igrishaev/mockery/blob/304c3d0da758d53d4e716f98ed91a9eabf001f69/src/mockery/core.clj#L18",
+   :line 18,
    :var-type "function",
    :arglists ([opt]),
    :doc "Retuns an atom the represents a mock.",
@@ -19,12 +19,12 @@
    :wiki-url
    "https://igrishaev.github.io/mockery/index.html#mockery.core/make-mock"}
   {:raw-source-url
-   "https://github.com/igrishaev/mockery/raw/0986061885217c658d68f35462bceb9c352bb81b/src/mockery/core.clj",
+   "https://github.com/igrishaev/mockery/raw/304c3d0da758d53d4e716f98ed91a9eabf001f69/src/mockery/core.clj",
    :name "make-mock-fn",
    :file "src/mockery/core.clj",
    :source-url
-   "https://github.com/igrishaev/mockery/blob/0986061885217c658d68f35462bceb9c352bb81b/src/mockery/core.clj#L36",
-   :line 36,
+   "https://github.com/igrishaev/mockery/blob/304c3d0da758d53d4e716f98ed91a9eabf001f69/src/mockery/core.clj#L43",
+   :line 43,
    :var-type "function",
    :arglists ([mock]),
    :doc
@@ -33,12 +33,12 @@
    :wiki-url
    "https://igrishaev.github.io/mockery/index.html#mockery.core/make-mock-fn"}
   {:raw-source-url
-   "https://github.com/igrishaev/mockery/raw/0986061885217c658d68f35462bceb9c352bb81b/src/mockery/core.clj",
+   "https://github.com/igrishaev/mockery/raw/304c3d0da758d53d4e716f98ed91a9eabf001f69/src/mockery/core.clj",
    :name "resolve!",
    :file "src/mockery/core.clj",
    :source-url
-   "https://github.com/igrishaev/mockery/blob/0986061885217c658d68f35462bceb9c352bb81b/src/mockery/core.clj#L69",
-   :line 69,
+   "https://github.com/igrishaev/mockery/blob/304c3d0da758d53d4e716f98ed91a9eabf001f69/src/mockery/core.clj#L75",
+   :line 75,
    :var-type "function",
    :arglists ([target]),
    :doc
@@ -47,12 +47,12 @@
    :wiki-url
    "https://igrishaev.github.io/mockery/index.html#mockery.core/resolve!"}
   {:raw-source-url
-   "https://github.com/igrishaev/mockery/raw/0986061885217c658d68f35462bceb9c352bb81b/src/mockery/core.clj",
+   "https://github.com/igrishaev/mockery/raw/304c3d0da758d53d4e716f98ed91a9eabf001f69/src/mockery/core.clj",
    :name "with-mock",
    :file "src/mockery/core.clj",
    :source-url
-   "https://github.com/igrishaev/mockery/blob/0986061885217c658d68f35462bceb9c352bb81b/src/mockery/core.clj#L107",
-   :line 107,
+   "https://github.com/igrishaev/mockery/blob/304c3d0da758d53d4e716f98ed91a9eabf001f69/src/mockery/core.clj#L113",
+   :line 113,
    :var-type "macro",
    :arglists ([mock opt & body]),
    :doc
@@ -61,12 +61,12 @@
    :wiki-url
    "https://igrishaev.github.io/mockery/index.html#mockery.core/with-mock"}
   {:raw-source-url
-   "https://github.com/igrishaev/mockery/raw/0986061885217c658d68f35462bceb9c352bb81b/src/mockery/core.clj",
+   "https://github.com/igrishaev/mockery/raw/304c3d0da758d53d4e716f98ed91a9eabf001f69/src/mockery/core.clj",
    :name "with-mocks",
    :file "src/mockery/core.clj",
    :source-url
-   "https://github.com/igrishaev/mockery/blob/0986061885217c658d68f35462bceb9c352bb81b/src/mockery/core.clj#L88",
-   :line 88,
+   "https://github.com/igrishaev/mockery/blob/304c3d0da758d53d4e716f98ed91a9eabf001f69/src/mockery/core.clj#L94",
+   :line 94,
    :var-type "macro",
    :arglists ([bind-opt & body]),
    :doc
