@@ -3,14 +3,14 @@
    :name "mockery.core",
    :wiki-url "https://igrishaev.github.io/mockeryindex.html",
    :source-url
-   "https://github.com/igrishaev/mockery/blob/304c3d0da758d53d4e716f98ed91a9eabf001f69/src/mockery/core.clj"}),
+   "https://github.com/igrishaev/mockery/blob/987480de78819062fd07da8ef09360812c408401/src/mockery/core.clj"}),
  :vars
  ({:raw-source-url
-   "https://github.com/igrishaev/mockery/raw/304c3d0da758d53d4e716f98ed91a9eabf001f69/src/mockery/core.clj",
+   "https://github.com/igrishaev/mockery/raw/987480de78819062fd07da8ef09360812c408401/src/mockery/core.clj",
    :name "make-mock",
    :file "src/mockery/core.clj",
    :source-url
-   "https://github.com/igrishaev/mockery/blob/304c3d0da758d53d4e716f98ed91a9eabf001f69/src/mockery/core.clj#L18",
+   "https://github.com/igrishaev/mockery/blob/987480de78819062fd07da8ef09360812c408401/src/mockery/core.clj#L18",
    :line 18,
    :var-type "function",
    :arglists ([opt]),
@@ -19,11 +19,11 @@
    :wiki-url
    "https://igrishaev.github.io/mockery/index.html#mockery.core/make-mock"}
   {:raw-source-url
-   "https://github.com/igrishaev/mockery/raw/304c3d0da758d53d4e716f98ed91a9eabf001f69/src/mockery/core.clj",
+   "https://github.com/igrishaev/mockery/raw/987480de78819062fd07da8ef09360812c408401/src/mockery/core.clj",
    :name "make-mock-fn",
    :file "src/mockery/core.clj",
    :source-url
-   "https://github.com/igrishaev/mockery/blob/304c3d0da758d53d4e716f98ed91a9eabf001f69/src/mockery/core.clj#L43",
+   "https://github.com/igrishaev/mockery/blob/987480de78819062fd07da8ef09360812c408401/src/mockery/core.clj#L43",
    :line 43,
    :var-type "function",
    :arglists ([mock]),
@@ -33,11 +33,11 @@
    :wiki-url
    "https://igrishaev.github.io/mockery/index.html#mockery.core/make-mock-fn"}
   {:raw-source-url
-   "https://github.com/igrishaev/mockery/raw/304c3d0da758d53d4e716f98ed91a9eabf001f69/src/mockery/core.clj",
+   "https://github.com/igrishaev/mockery/raw/987480de78819062fd07da8ef09360812c408401/src/mockery/core.clj",
    :name "resolve!",
    :file "src/mockery/core.clj",
    :source-url
-   "https://github.com/igrishaev/mockery/blob/304c3d0da758d53d4e716f98ed91a9eabf001f69/src/mockery/core.clj#L75",
+   "https://github.com/igrishaev/mockery/blob/987480de78819062fd07da8ef09360812c408401/src/mockery/core.clj#L75",
    :line 75,
    :var-type "function",
    :arglists ([target]),
@@ -47,25 +47,25 @@
    :wiki-url
    "https://igrishaev.github.io/mockery/index.html#mockery.core/resolve!"}
   {:raw-source-url
-   "https://github.com/igrishaev/mockery/raw/304c3d0da758d53d4e716f98ed91a9eabf001f69/src/mockery/core.clj",
+   "https://github.com/igrishaev/mockery/raw/987480de78819062fd07da8ef09360812c408401/src/mockery/core.clj",
    :name "with-mock",
    :file "src/mockery/core.clj",
    :source-url
-   "https://github.com/igrishaev/mockery/blob/304c3d0da758d53d4e716f98ed91a9eabf001f69/src/mockery/core.clj#L113",
+   "https://github.com/igrishaev/mockery/blob/987480de78819062fd07da8ef09360812c408401/src/mockery/core.clj#L113",
    :line 113,
    :var-type "macro",
    :arglists ([mock opt & body]),
    :doc
-   "Runs the code block substituting a target function with a dummy\none (\"mock\" function). This dummy function behaves the way you\ndetermine with options. It counts the number of calls, accumulates\nit's arguments, can cause side effects or rise a given\nexception. Once you go out from the macro, the target function will\nobtain it's origin value.\n\nArguments:\n\n- `mock`: a symbol to bind a mock instance inside the code block,\n\n- `opt`: a map with the following parameters:\n\n-- `:target` (required): a symbol or a keyword points to a target\nfunction to mock. May include a namespace (be full-qualified).\n\n-- `:value`: any value to return from a mocked function. If it's a\nfunction by itself (defn, fn or #(...)), it will be called\nafterwards.\n\n-- `:side-effect`: any function with no arguments that is triggered\nwhen calling a target function.\n\n-- `:throw`: either an Exception instance to be thrown with the\nstandard `throw` pipeline or any map to be thrown with `(ex-info)`\nwrapper. Useful to simulate runtime exceptions.\n\nMore on mock instance.\n\nThe mock instance you have bound to the `mock` parameter is an atom\nholds a map. It extends the `opt` map described above. In addition\nto those immutable fields, it has the following ones:\n\n-- `:called?`: a boolean flag indicates whether a function was called\nat least one time or not. `false` by default.\n\n-- `:call-count`: a number times the function was called. 0 by default.\n\n-- `:call-args`: the last arguments were passed to the\nfunction. `nil` by default.\n\n-- `:call-args-list`: a vector of all the args were passed, `[]` by\ndefault.\n\nExample:\n\n(with-mock mock\n  {:target :clojure.pprint/pprint\n   :return \":-)\"\n   :side-effect #(println \"Hi!\")}\n  (clojure.pprint/pprint {:foo 42}))\n\nHi!\n:-)\n\nOnce you deref the `mock` variable inside the code block, you'll get:\n\n{:called? true\n :call-count 1\n :call-args ({:foo 42})\n :call-args-list [({:foo 42})]\n :target :clojure.pprint/pprint\n :return \":-)\"\n :side-effect #function[mockery.core/eval12666/fn--12667]}\n\nChecking `:call-count` and `:call-args` might be good for your unit\ntests.",
+   "Runs the code block substituting a target function with a dummy\none (\"mock\" function). This dummy function behaves the way you\ndetermine with options. It counts the number of calls, accumulates\nit's arguments, can cause side effects or rise a given\nexception. Once you go out from the macro, the target function will\nobtain it's origin value.\n\nArguments:\n\n- `mock`: a symbol to bind a mock instance inside the code block,\n\n- `opt`: a map with the following parameters:\n\n-- `:target` (required): a symbol or a keyword points to a target\nfunction to mock. May include a namespace (be full-qualified).\n\n-- `:value`: any value to return from a mocked function. If it's a\nfunction by itself (defn, fn or #(...)), it will be called\nafterwards.\n\n-- `:side-effect`: any function with no arguments that is triggered\nwhen calling a target function.\n\n-- `:throw`: either an Exception instance to be thrown with the\nstandard `throw` pipeline or any map to be thrown with `(ex-info)`\nwrapper. Useful to simulate runtime exceptions.\n\nMore on mock instance.\n\nThe mock instance you have bound to the `mock` parameter is an atom\nholds a map. It extends the `opt` map described above. In addition\nto those immutable fields, it has the following ones:\n\n-- `:called?`: a boolean flag indicates whether a function was called\nat least one time or not. `false` by default.\n\n-- `:call-count`: a number times the function was called. 0 by default.\n\n-- `:call-args`: the last arguments were passed to the\nfunction. `nil` by default.\n\n-- `:call-args-list`: a vector of all the args were passed, `[]` by\ndefault.\n\n-- `:return`: the latest returned value.\n\n-- `:return-list`: a vector of all the values have ever been returned.\n\nExample:\n\n(with-mock mock\n  {:target :clojure.pprint/pprint\n   :return \":-)\"\n   :side-effect #(println \"Hi!\")}\n  (clojure.pprint/pprint {:foo 42}))\n\nHi!\n:-)\n\nOnce you deref the `mock` variable inside the code block, you'll get:\n\n{:called? true\n :call-count 1\n :call-args ({:foo 42})\n :call-args-list [({:foo 42})]\n :target :clojure.pprint/pprint\n :return \":-)\"\n :side-effect #function[mockery.core/eval12666/fn--12667]}\n\nChecking `:call-count` and `:call-args` might be good for your unit\ntests.",
    :namespace "mockery.core",
    :wiki-url
    "https://igrishaev.github.io/mockery/index.html#mockery.core/with-mock"}
   {:raw-source-url
-   "https://github.com/igrishaev/mockery/raw/304c3d0da758d53d4e716f98ed91a9eabf001f69/src/mockery/core.clj",
+   "https://github.com/igrishaev/mockery/raw/987480de78819062fd07da8ef09360812c408401/src/mockery/core.clj",
    :name "with-mocks",
    :file "src/mockery/core.clj",
    :source-url
-   "https://github.com/igrishaev/mockery/blob/304c3d0da758d53d4e716f98ed91a9eabf001f69/src/mockery/core.clj#L94",
+   "https://github.com/igrishaev/mockery/blob/987480de78819062fd07da8ef09360812c408401/src/mockery/core.clj#L94",
    :line 94,
    :var-type "macro",
    :arglists ([bind-opt & body]),
