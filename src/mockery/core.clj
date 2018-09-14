@@ -34,10 +34,10 @@
     :default
     (assert false (format "Unsupported exception data: %s" exc))))
 
-(defn eval-mock [mock]
+(defn eval-mock [mock args]
   (let [return (:return @mock)]
     (if (fn? return)
-      (return)
+      (apply return args)
       return)))
 
 (defn make-mock-fn
@@ -61,7 +61,7 @@
       (smart-throw exc))
 
     ;; eval the value, save it and return
-    (let [result (eval-mock mock)]
+    (let [result (eval-mock mock args)]
       (swap! mock update :return-list conj result)
       result)))
 
