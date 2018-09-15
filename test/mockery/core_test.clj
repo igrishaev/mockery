@@ -124,7 +124,7 @@
 
 (deftest test-various-results
   (let [state (atom 0)
-        func (fn []
+        func (fn [& _]
                (swap! state inc)
                @state)]
     (with-mocks
