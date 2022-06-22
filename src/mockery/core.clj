@@ -127,7 +127,7 @@
   -- `:target` (required): a symbol or a keyword points to a target
   function to mock. May include a namespace (be full-qualified).
 
-  -- `:value`: any value to return from a mocked function. If it's a
+  -- `:return`: any value to return from a mocked function. If it's a
   function by itself (defn, fn or #(...)), it will be called
   afterwards.
 
